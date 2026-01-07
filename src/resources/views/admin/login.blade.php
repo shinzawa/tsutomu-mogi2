@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 <!-- タイトル -->
-@section('title','ログイン')
+@section('title','管理者ログイン')
 
 <!-- css読み込み -->
 @section('css')
@@ -12,9 +12,9 @@
 @section('content')
 
 @include('components.header')
-<form action="/login" method="post" class="authenticate center">
+<form action="/admin/login" method="post" class="authenticate center">
     @csrf
-    <h1 class="page__title">ログイン</h1>
+    <h1 class="page__title">管理者ログイン</h1>
     <label for="mail" class="entry__name">メールアドレス</label>
     <input name="email" id="mail" type="email" class="input" value="{{ old('email') }}">
     <div class="form__error">
@@ -30,8 +30,5 @@
         @enderror
     </div>
     <button class="btn btn--big">ログインする</button>
-    <!-- <div class="link--register"> -->
-        <a href="/register" class="link">会員登録はこちら</a>
-    <!-- </div> -->
 </form>
 @endsection
