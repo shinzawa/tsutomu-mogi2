@@ -46,9 +46,4 @@ Route::post('/admin/logout', function () {
     return redirect('/admin/login');
 });
 
-Route::post('/admin/attendance/list', function () {
-    Log::info('POST HIT admin/attendance/list');
-    abort(405);
-});
-
 Route::post('/admin/login', [AuthenticatedSessionController::class, 'store']);
