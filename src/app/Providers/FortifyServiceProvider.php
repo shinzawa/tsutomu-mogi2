@@ -47,11 +47,13 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->instance(LogoutResponse::class, new class implements LogoutResponse {
             public function toResponse($request)
             {
+                Log::info("LOGOUT toResponse");
                 // まず、どのガードでログインしていたかを判定
                 $isAdmin = Auth::guard('admin')->check();
 
                 // 先にログアウト処理
                 if ($isAdmin) {
+                    Log::info("LOGOUT admin");
                     Auth::guard('admin')->logout();
                     $request->session()->invalidate();
                     $request->session()->regenerateToken();
@@ -60,6 +62,7 @@ class FortifyServiceProvider extends ServiceProvider
 
                 // 一般ユーザー
                 Auth::guard('web')->logout();
+                Log::info("LOGOUT user");
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
                 return redirect('/login');

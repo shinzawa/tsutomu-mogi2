@@ -34,16 +34,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // });
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');
+    Route::get('/login', [AdminLoginController::class, 'index'])->name('login.index');
+    Route::post('/login', [AdminLoginController::class, 'login'])->name('login.login');
+    Route::get('/logout', [AdminLoginController::class, 'logout'])->name('login.logout');
 
     Route::middleware(['auth:admin'])->group(function () {
-        Route::get('/attendance/list', [AdminAttendanceController::class, 'show']);
+        Route::get('/attendance/list', [AdminAttendanceController::class, 'show'])->name('attendance.list');
     });
 });
-
-Route::post('/admin/logout', function () {
-    Auth::guard('admin')->logout();
-    return redirect('/admin/login');
-});
-
-Route::post('/admin/login', [AuthenticatedSessionController::class, 'store']);
