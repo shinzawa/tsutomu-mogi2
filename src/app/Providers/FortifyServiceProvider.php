@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Contracts\LoginResponse;
+use Laravel\Fortify\Contracts\LogoutResponse;
 use Laravel\Fortify\Http\Requests\LoginRequest as FortifyLoginRequest;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -38,7 +39,30 @@ class FortifyServiceProvider extends ServiceProvider
                 }
 
                 // 一般ユーザー
-                return redirect('/attendance/list');
+                return redirect('/attendance');
+            }
+        });
+
+        // ログアウト後のリダイレクト
+        $this->app->instance(LogoutResponse::class, new class implements LogoutResponse {
+            public function toResponse($request)
+            {
+                // まず、どのガードでログインしていたかを判定
+                $isAdmin = Auth::guard('admin')->check();
+
+                // 先にログアウト処理
+                if ($isAdmin) {
+                    Auth::guard('admin')->logout();
+                    $request->session()->invalidate();
+                    $request->session()->regenerateToken();
+                    return redirect('/admin/login');
+                }
+
+                // 一般ユーザー
+                Auth::guard('web')->logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return redirect('/login');
             }
         });
     }
