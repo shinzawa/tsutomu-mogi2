@@ -48,18 +48,6 @@ class FortifyServiceProvider extends ServiceProvider
             public function toResponse($request)
             {
                 Log::info("LOGOUT toResponse");
-                // まず、どのガードでログインしていたかを判定
-                $isAdmin = Auth::guard('admin')->check();
-
-                // 先にログアウト処理
-                if ($isAdmin) {
-                    Log::info("LOGOUT admin");
-                    Auth::guard('admin')->logout();
-                    $request->session()->invalidate();
-                    $request->session()->regenerateToken();
-                    return redirect('/admin/login');
-                }
-
                 // 一般ユーザー
                 Auth::guard('web')->logout();
                 Log::info("LOGOUT user");
