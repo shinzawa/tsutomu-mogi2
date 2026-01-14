@@ -29,7 +29,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminLoginController::class, 'index'])->name('login.index');
-    // Route::post('/login', [AdminLoginController::class, 'login'])->name('login.login');
     Route::get('/logout', [AdminLoginController::class, 'logout'])->name('login.logout');
 
     Route::middleware(['auth:admin'])->group(function () {
