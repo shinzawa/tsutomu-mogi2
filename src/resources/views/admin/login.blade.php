@@ -12,7 +12,7 @@
 @section('content')
 
 @include('components.header')
-<form action="/admin/login" method="post" class="authenticate center">
+<form action="/login" method="post" class="authenticate center" novalidate>
     @csrf
     <h1 class="page__title">管理者ログイン</h1>
     <label for="mail" class="entry__name">メールアドレス</label>
@@ -29,6 +29,7 @@
         {{ $message }}
         @enderror
     </div>
+    <input type="hidden" name="guard" value="admin">
     <button class="btn btn--big">ログインする</button>
 </form>
 @endsection

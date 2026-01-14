@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -14,7 +15,7 @@ class AdminLoginController extends Controller
         return view('/admin/login');
     }
     //ログイン処理
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
         $credentials = $request->only(['email', 'password']);
         Log::info('LOGIN');

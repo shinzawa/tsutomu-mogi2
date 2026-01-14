@@ -27,15 +27,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'show']);
 });
 
-// Route::middleware(['auth:web'])->group(function () {
-//     Route::get('/dashboard', function () {
-//         return view('dashboard');
-//     });
-// });
-
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminLoginController::class, 'index'])->name('login.index');
-    Route::post('/login', [AdminLoginController::class, 'login'])->name('login.login');
+    // Route::post('/login', [AdminLoginController::class, 'login'])->name('login.login');
     Route::get('/logout', [AdminLoginController::class, 'logout'])->name('login.logout');
 
     Route::middleware(['auth:admin'])->group(function () {

@@ -12,7 +12,7 @@
 @section('content')
 
 @include('components.header')
-<form action="/register" method="post" class="authenticate center">
+<form action="/register" method="post" class="authenticate center" novalidate>
     @csrf
     <h1 class="page__title--register">会員登録</h1>
     <label for="name" class="entry__name--register">名前</label>
