@@ -8,6 +8,16 @@ class AttendanceController extends Controller
 {
     public function show()
     {
-        return view('/attendance');
+        return view('/attendance/record');
+    }
+
+    public function index()
+    {
+        return view('/attendance/index');
+    }
+
+    public function detail($id)
+    {
+    return view('/attendance/show');
     }
 }
