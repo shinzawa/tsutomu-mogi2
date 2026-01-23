@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class AttendanceController extends Controller
 {
@@ -19,7 +20,8 @@ class AttendanceController extends Controller
 
     public function staffIndex()
     {
-        return view('/admin/staff/index');
+        $users = User::all();
+        return view('/admin/staff/index',compact('users'));
     }
 
     public function index($id)

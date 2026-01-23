@@ -16,17 +16,65 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        // $param = [
+        //     'name' => '一般ユーザ1',
+        //     'email' => 'general1@gmail.com',
+        //     'email_verified_at' => Carbon::now(),
+        //     'password' => Hash::make('password'),
+        // ];
+        // User::create($param);
+
+        // $param = [
+        //     'name' => '一般ユーザ2',
+        //     'email' => 'general2@gmail.com',
+        //     'email_verified_at' => Carbon::now(),
+        //     'password' => Hash::make('password'),
+        // ];
+        // User::create($param);
+
         $param = [
-            'name' => '一般ユーザ1',
-            'email' => 'general1@gmail.com',
+            'name' => '西 伶奈',
+            'email' => 'reina.n@coachtech.com',
             'email_verified_at' => Carbon::now(),
             'password' => Hash::make('password'),
         ];
         User::create($param);
 
         $param = [
-            'name' => '一般ユーザ2',
-            'email' => 'general2@gmail.com',
+            'name' => '山田 太郎',
+            'email' => 'taro.y@coachtech.com',
+            'email_verified_at' => Carbon::now(),
+            'password' => Hash::make('password'),
+        ];
+        User::create($param);
+
+        $param = [
+            'name' => '増田 一世',
+            'email' => 'issei.m@coachtech.com',
+            'email_verified_at' => Carbon::now(),
+            'password' => Hash::make('password'),
+        ];
+        User::create($param);
+
+        $param = [
+            'name' => '山本 敬吉',
+            'email' => 'keikichi.y@coachtech.com',
+            'email_verified_at' => Carbon::now(),
+            'password' => Hash::make('password'),
+        ];
+        User::create($param);
+
+        $param = [
+            'name' => '秋田 朋美',
+            'email' => 'tomomi.a@coachtech.com',
+            'email_verified_at' => Carbon::now(),
+            'password' => Hash::make('password'),
+        ];
+        User::create($param);
+
+        $param = [
+            'name' => '中西 教夫',
+            'email' => 'norio.n@coachtech.com',
             'email_verified_at' => Carbon::now(),
             'password' => Hash::make('password'),
         ];
