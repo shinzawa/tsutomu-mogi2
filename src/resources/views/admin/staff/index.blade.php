@@ -12,22 +12,27 @@
 @section('content')
 
 @include('components.header')
-<h1 >スタッフ一覧</h1>
-<div class="stafftable">
-    <table>
-        <tr>
-            <th>名前 </th>
-            <th>メールアドレス </th>
-            <th>詳細 </th>
-        </tr>
-        @foreach ($users as $user)
-        <tr>
-            <td>{{ $user->name }} </td>
-            <td>{{ $user->email }} </td>
-            <td>detail</td>
-        </tr>
-        @endforeach
-    </table>
+<div class="main-box">
+    <div class="title-box">
+        <div class="title-bar"></div>
+        <h1>スタッフ一覧</h1>
+    </div>
+    <div class="staff-table">
+        <table>
+            <tr>
+                <th>名前 </th>
+                <th>メールアドレス </th>
+                <th>月次勤怠 </th>
+            </tr>
+            @foreach ($users as $user)
+            <tr>
+                <td>{{ $user->name }} </td>
+                <td>{{ $user->email }} </td>
+                <td>詳細</td>
+            </tr>
+            @endforeach
+        </table>
+    </div>
 </div>
 
 @endsection
