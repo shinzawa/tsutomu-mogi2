@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDailyAttendancesTable extends Migration
+class CreateAttendancesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateDailyAttendancesTable extends Migration
      */
     public function up()
     {
-        Schema::create('daily_attendances', function (Blueprint $table) {
+        Schema::create('attendances', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->date('work_date');
@@ -31,6 +31,6 @@ class CreateDailyAttendancesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('daily_attendances');
+        Schema::dropIfExists('attendances');
     }
 }

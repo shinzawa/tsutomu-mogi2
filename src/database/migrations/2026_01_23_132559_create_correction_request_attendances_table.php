@@ -15,7 +15,7 @@ class CreateCorrectionRequestAttendancesTable extends Migration
     {
         Schema::create('correction_request_attendances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('daily_attendances_id')->constrained();
+            $table->foreignId('attendances_id')->constrained();
             $table->foreignId('user_id')->constrained(); // 申請者
             $table->dateTime('requested_clock_in')->nullable();
             $table->dateTime('requested_clock_out')->nullable();
