@@ -27,8 +27,8 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'show']);
-    Route::get('/attendance/list', [AttendanceController::class, 'index']);
-    Route::get('/attendance/detail/{id}', [AttendanceController::class, 'detail']);
+    Route::get('/attendance/list', [AttendanceController::class, 'index'])->name('attendance.index');
+    Route::get('/attendance/detail/{id}', [AttendanceController::class, 'detail'])->name('attendance.detail');
     Route::get('/stamp_correction_request/list', [StampCorrectionController::class, 'show']);
 });
 
