@@ -21,4 +21,14 @@ class BreakTime extends Model
     {
         return $this->belongsTo(Attendance::class);
     }
+
+    public function getDurationMinutesAttribute()
+    {
+        if (!$this->break_start || !$this->break_end) {
+            return 0;
+        }
+
+        return \Carbon\Carbon::parse($this->break_end)
+            ->diffInMinutes(\Carbon\Carbon::parse($this->break_start));
+    }
 }

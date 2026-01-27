@@ -41,6 +41,11 @@ class Attendance extends Model
         // 分 → 時間（小数）
         return round($this->work_minutes / 60, 2);
     }
+    
+    public function getTotalBreakMinutesAttribute()
+    {
+        return $this->breaks->sum('duration_minutes');
+    }
 
     public function breaks()
     {

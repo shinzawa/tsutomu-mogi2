@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Attendance;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -37,9 +38,6 @@ class AttendanceController extends Controller
             $dates[] = $date->copy();
         }
 
-
-
-
         // 当月の勤怠データを取得
         $attendances = Attendance::where('user_id', $userId)
             ->whereYear('work_date', $year)
@@ -64,15 +62,23 @@ class AttendanceController extends Controller
 
     }
 
-    public function detail($id)
+    public function detail(Request $request, $id)
     {
-        $attendance = Attendance::with('breaks')->findOrFail($id);
-
-        // ログインユーザー以外のデータを見れないようにする
-        if ($attendance->user_id !== Auth::id()) {
-            abort(403);
+        // $id はAttendanceのprime index
+        $userId = Auth::id();
+        $user = User::find($userId);
+        if ($id>0) {
+            $attendance = Attendance::with('breaks')->findOrFail($id);
+            // ログインユーザー以外のデータを見れないようにする。
+            // TODO: でもエラーを仕込んでよいのかでもエラーを仕込んでよいのか
+            if ($attendance->user_id !== Auth::id()) {
+                abort(403);
+            }
+        } else {
+            $attendance = null;
+            $date = $request->date;
         }
 
-        return view('attendance.show', compact('attendance'));
+        return view('attendance.show', compact('attendance','user'));
     }
 }

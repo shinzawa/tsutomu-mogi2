@@ -1,0 +1,66 @@
+body 
+{
+    background-color: #F0EFF2;
+    height: auto;
+}
+
+.main-box
+{
+    width:900px;
+    height:auto;
+    margin: 0 auto;
+    display: block;
+    justify-content: center; /* 左右中央 */
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.title-box {
+    display: flex;
+    justify-content: left;
+    margin-top: 80px;
+    margin-bottom: 47px;
+}
+
+.title-bar {
+    width: 8px;
+    height: 40px;
+    display: inline;
+    margin-right: 20px;
+    transform-origin: center;
+    background-color: #000000;
+    border-width: 8px;
+}
+
+.index-table {
+    width: 900px;
+    font-family: Inter;
+    font-size: 16px;
+    letter-spacing: 2px;
+    margin: 0 auto;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    border-top: 3px solid #F0EFF2;
+    border-bottom: 3px solid #F0EFF2;
+}
+
+table th, table td {
+    height: 80px;
+    text-align: left;    /* 左右中央 */
+    vertical-align: middle; /* 上下中央 */
+    /* 縦罫線を消し、横罫線だけにする */
+    border-top: 3px solid #E1E1E1;
+    border-bottom: 3px solid #E1E1E1;
+    border-left: none;
+    border-right: none;
+    padding-left: 50px;
+}
+
