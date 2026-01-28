@@ -16,8 +16,8 @@ class CreateCorrectionRequestBreakesTable extends Migration
         Schema::create('correction_request_breakes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('request_id')->constrained('correction_request_attendances');
-            $table->dateTime('break_start');
-            $table->dateTime('break_end');
+            $table->dateTime('start');
+            $table->dateTime('end');
             $table->timestamps();
         });
     }

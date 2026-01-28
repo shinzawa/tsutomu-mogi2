@@ -64,3 +64,42 @@ table th, table td {
     padding-left: 50px;
 }
 
+table th {
+    width: 250px;
+    text-align: left;
+    padding-left: 50px;
+    padding-right: 0px;
+    color:  #737373;
+}
+
+table td:nth-child(1) {
+    width: 200px;
+    padding-left: 0px;
+    padding-right: 0px;
+    font-weight: bold;
+    color:  #000000;
+}
+
+table td:nth-child(2) {
+    width: 100px;
+    padding-left: 40px;
+    padding-right: 0px;
+    font-weight: bold;
+    color:  #000000;
+}
+
+table td:nth-child(3) {
+    width: 50px;
+    padding-left: 10px;
+    padding-right: 0px;
+    font-weight: bold;
+    color:  #000000;
+}
+
+table td:nth-child(4) {
+    width: 280px;
+    padding-left: 10px;
+    padding-right: 0px;
+    font-weight: bold;
+    color:  #000000;
+}

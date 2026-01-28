@@ -13,8 +13,8 @@ class BreakTime extends Model
 
     protected $fillable = [
         'attendance_id',
-        'break_start',
-        'break_end',
+        'start',
+        'end',
     ];
 
     public function attendance()
@@ -24,11 +24,11 @@ class BreakTime extends Model
 
     public function getDurationMinutesAttribute()
     {
-        if (!$this->break_start || !$this->break_end) {
+        if (!$this->start || !$this->end) {
             return 0;
         }
 
-        return \Carbon\Carbon::parse($this->break_end)
-            ->diffInMinutes(\Carbon\Carbon::parse($this->break_start));
+        return \Carbon\Carbon::parse($this->end)
+            ->diffInMinutes(\Carbon\Carbon::parse($this->start));
     }
 }
