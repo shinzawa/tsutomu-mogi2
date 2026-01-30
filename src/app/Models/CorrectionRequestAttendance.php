@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class CorrectionRequestAttendance extends Model
 {
     use HasFactory;
+    
     protected $table = 'correction_request_attendances';
 
     protected $fillable = [

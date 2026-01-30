@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
 use App\Http\Controllers\StampCorrectionController;
 use App\Http\Controllers\Admin\StampCorrectionController as AdminStampCorrectionController;
+use App\Http\Controllers\CorrectionRequestAttendanceController;
 use App\Http\Requests\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,8 +30,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'show']);
     Route::get('/attendance/list', [AttendanceController::class, 'index'])->name('attendance.index');
     Route::get('/attendance/detail/{id}', [AttendanceController::class, 'detail'])->name('attendance.detail');
-    Route::get('/stamp_correction_request/list', [StampCorrectionController::class, 'show']);
+    Route::get('/stamp_correction_request/list', [StampCorrectionController::class, 'index']);
     Route::post('/attendance/detail/{id}', [AttendanceController::class, 'update'])->name('attendance.update');
+    Route::get('/attendance/????', [AttendanceController::class, '']);
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -41,7 +43,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/attendance/list', [AdminAttendanceController::class, 'show'])->name('attendance.list');
         Route::get('/attendance/{id}', [AdminAttendanceController::class, 'detail'])->name('attendance.detail');
         Route::get('/staff/list', [AdminAttendanceController::class, 'staffIndex'])->name('staff.list');
-        Route::get('/attendance/staff/{id}', [AdminAttendanceController::class, 'index'])->name('attendance.list');
+        Route::get('/attendance/staff/{id}', [AdminAttendanceController::class, 'index'])->name('staff.attendance.index');
         Route::get('/stamp_correction_request/list', [AdminStampCorrectionController::class, 'index'])->name('attendance.list');
         Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [AdminStampCorrectionController::class, 'approve'])->name('attendance.list');
     });

@@ -28,11 +28,14 @@
             <tr>
                 <td>{{ $user->name }} </td>
                 <td>{{ $user->email }} </td>
-                <td>詳細</td>
+                <td>
+                    <a href="/admin/attendance/staff/{{ $user->id }}">
+                        詳細
+                    </a>
+                </td>
             </tr>
             @endforeach
         </table>
     </div>
 </div>
-
 @endsection

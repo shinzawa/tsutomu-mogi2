@@ -7,6 +7,7 @@ use App\Models\Attendance;
 use App\Models\CorrectionRequestAttendance;
 use App\Models\CorrectionRequestBreakTime;
 use App\Models\User;
+use App\Http\Requests\CorrectionRequestAttendanceRequest;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -84,7 +85,7 @@ class AttendanceController extends Controller
         return view('attendance.show', compact('attendance', 'user'));
     }
 
-    public function update(Request $request, $id)
+    public function update(CorrectionRequestAttendanceRequest $request, $id)
     {
         $attendance = Attendance::with('breaks')->findOrFail($id);
 
@@ -94,18 +95,16 @@ class AttendanceController extends Controller
         }
 
         // ▼▼▼ 1. 修正申請（correction_request_attendances）を作成 ▼▼▼
-
         $correction = CorrectionRequestAttendance::create([
             'attendances_id'       => $attendance->id,
             'user_id'              => Auth::id(),
             'requested_clock_in'   => $attendance->work_date . ' ' . $request->clock_in,
             'requested_clock_out'  => $attendance->work_date . ' ' . $request->clock_out,
-            'reason'               => $request->reason,
+            'reason'               => $request->note,
             'status'               => 'pending',
         ]);
 
         // ▼▼▼ 2. 修正申請用の休憩（correction_request_breakes）を登録 ▼▼▼
-
         $startList = $request->break_start;   // 配列
         $endList   = $request->break_end;     // 配列
 
@@ -118,12 +117,10 @@ class AttendanceController extends Controller
                 if (empty($start) && empty($end)) {
                     continue;
                 }
-
                 // start または end が片方だけ → スキップ
                 if (empty($start) || empty($end)) {
                     continue;
                 }
-
                 // 修正申請用の休憩を保存
                 CorrectionRequestBreakTime::create([
                     'request_id' => $correction->id,
@@ -134,9 +131,8 @@ class AttendanceController extends Controller
         }
 
         // ▼▼▼ 3. 完了メッセージ ▼▼▼
-
         return redirect()
-            ->route('attendance.show', $attendance->id)
+            ->route('attendance.show', $correction->id)
             ->with('success', '修正申請を送信しました');
     }
 }

@@ -24,7 +24,6 @@
     <div class="index-table">
         <form action="{{ route('attendance.update', $attendance->id) }}" method="POST">
             @csrf
-            @method('PUT')
             <table>
                 <tr>
                     <th>名前</th>
