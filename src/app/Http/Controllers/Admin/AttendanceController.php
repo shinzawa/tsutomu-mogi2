@@ -10,9 +10,39 @@ use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
-    public function show()
+    public function show(Request $request)
     {
-        return view('/admin/attendance/index');
+        // 現在の年月
+        $current = Carbon::now();
+        $year = $current->year;
+        $month = $current->month;
+        $day = $current->day;
+
+        // 前日・翌日
+        $prev = $current->copy()->subDay();
+        $next = $current->copy()->addDay();
+
+        // 表示したい日付（指定がなければ今日）
+        $date = $request->input('date', now()->toDateString());
+
+        // 全スタッフを取得しつつ、その日の勤怠を eager load
+        $users = User::with(['attendances' => function ($query) use ($date) {
+            $query->where('work_date', $date);
+        }])->orderBy('name')->get();
+
+        return view('admin.attendance.index', [
+            'date' => $date,
+            'users' => $users,
+            'year' => $year,
+            'month' => $month,
+            'day' => $day,
+            'prevYear' => $prev->year,
+            'prevMonth' => $prev->month,
+            'prevDay' => $prev->day,
+            'nextYear' => $next->year,
+            'nextMonth' => $next->month,
+            'nextDay' => $next->day,
+        ]);
     }
 
     public function detail(Request $request, $id)

@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AttendancesTableSeeder::class);
         $this->call(BreaksTableSeeder::class);
         $this->call(CorrectionRequestAttendancesTableSeeder::class);
+        $this->call(CorrectionRequestBreaksTableSeeder::class);
     }
 }

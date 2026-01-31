@@ -88,4 +88,17 @@ class CorrectionRequestAttendanceController extends Controller
         return redirect()->route('correction.index')
             ->with('success', '修正申請を却下しました');
     }
+
+    public function pendingDetail($id)
+    {
+        $correction = CorrectionRequestAttendance::with(['attendance', 'breaks'])
+            ->findOrFail($id);
+
+        // 一般ユーザーは自分の申請のみ閲覧可能
+        if ($correction->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        return view('stamp_correction_request.pending_detail', compact('correction'));
+    }
 }

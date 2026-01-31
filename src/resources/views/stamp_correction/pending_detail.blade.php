@@ -19,11 +19,9 @@
         <h1>勤怠詳細</h1>
     </div>
     @php
-    $breaks = $attendance->breaks;
+    $breaks = $correction->attendance->breaks;
     @endphp
     <div class="index-table">
-        <form action="{{ route('attendance.update', $attendance->id) }}" method="POST">
-            @csrf
             <table>
                 <tr>
                     <th>名前</th>
@@ -32,11 +30,11 @@
                 <tr>
                     <th>日付</th>
                     <td>
-                        {{ \Carbon\Carbon::parse($attendance->work_date)->format('Y年') }}
+                        {{ \Carbon\Carbon::parse($correction->attendance->work_date)->format('Y年') }}
                     </td>
                     <td></td>
                     <td>
-                        {{ \Carbon\Carbon::parse($attendance->work_date)->format('n月 j日') }}
+                        {{ \Carbon\Carbon::parse($correction->attendance->work_date)->format('n月 j日') }}
                     </td>
                 </tr>
                 <tr>
@@ -45,7 +43,7 @@
                         <input type="time"
                             name="clock_in"
                             class="form-control"
-                            value="{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}">
+                            value="{{ $correction->requested_clock_in ? \Carbon\Carbon::parse($correction->requested_clock_in)->format('H:i') : '' }}">
                     </td>
                     <td>
                         ～
@@ -54,13 +52,13 @@
                         <input type="time"
                             name="clock_out"
                             class="form-control"
-                            value="{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}">
+                            value="{{ $correction->requested_clock_out ? \Carbon\Carbon::parse($correction->requested_clock_out)->format('H:i') : '' }}">
                     </td>
 
                 </tr>
                 {{-- ▼ 休憩時間の詳細行を動的に生成 --}}
                 @php
-                $breaks = $attendance->breaks;
+                $breaks = $correction->breaks;
                 $breakCount = $breaks->count();
                 $rows = $breakCount + 1; // 休憩n+1 の空行を追加
                 @endphp
@@ -92,32 +90,25 @@
                     </td>
                     @else
                     <td>
-                        <input type="time"
-                            name="break_start[{{ $i }}]"
-                            class="form-control"
-                            value="">
+                        {{-- 空欄 --}}
                     </td>
                     <td>
-                        〜
+                        ~
                     </td>
                     <td>
-                        <input type="time"
-                            name="break_end[{{ $i }}]"
-                            class=" form-control"
-                            value="">
+                        {{-- 空欄 --}}
                     </td>
-                      @endif
+                    @endif
                     </tr>
                     @endfor
                     <tr>
                         <th>備考</th>
                         <td>
-                            <textarea name="note" class="form-control" rows="3">{{ $attendance->note }}</textarea>
+                            <textarea name="note" class="form-control" rows="3">{{ $correction->reason }}</textarea>
                         </td>
                     </tr>
             </table>
-            <div class="right-align">
-                <button type="submit" class="btn btn-primary">修正</button>
+            <div class="alert alert-warning">
+                ※ 承認待ちのため修正はできません
             </div>
-        </form>
-        @endsection
+@endsection

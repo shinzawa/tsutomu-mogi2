@@ -20,17 +20,30 @@ class StampCorrectionController extends Controller
         return view('/stamp_correction/index', compact('request'));
     }
 
-    public function index($id)
+    public function index()
     {
-        $correctionRequest = CorrectionRequestAttendance::with('breaks', 'attendance')->findOrFail($id);
+        $user = Auth::user();
+        $pending = CorrectionRequestAttendance::with('breaks', 'attendance')
+            ->where('user_id', $user->id)->where('status', 'pending')
+            ->get();
+
+        $approved = CorrectionRequestAttendance::with('breaks', 'attendance')
+            ->where('user_id', $user->id)->where('status', 'approved')
+            ->get();
+
+        return view('/stamp_correction/index', compact('pending', 'approved', 'user'));
+    }
+
+    public function pendingDetail($id)
+    {
+        $correction = CorrectionRequestAttendance::with(['attendance', 'breaks'])
+            ->findOrFail($id);
 
         // 一般ユーザーは自分の申請のみ閲覧可能
-        if ($correctionRequest->user_id !== Auth::id()) {
+        if ($correction->user_id !== auth()->id()) {
             abort(403);
         }
-
-        $workDate = $correctionRequest->attendance->work_date;
-
-        return view('/stamp_correction/index', compact('request','workDate'));
+        $user = Auth::user();
+        return view('stamp_correction.pending_detail', compact('correction', 'user'));
     }
 }

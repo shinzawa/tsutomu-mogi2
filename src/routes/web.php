@@ -32,7 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance/detail/{id}', [AttendanceController::class, 'detail'])->name('attendance.detail');
     Route::get('/stamp_correction_request/list', [StampCorrectionController::class, 'index']);
     Route::post('/attendance/detail/{id}', [AttendanceController::class, 'update'])->name('attendance.update');
-    Route::get('/attendance/????', [AttendanceController::class, '']);
+    Route::get('/stamp_correction_request/pending/{id}', [StampCorrectionController::class, 'pendingDetail'])->name('correction.pendingDetail');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {

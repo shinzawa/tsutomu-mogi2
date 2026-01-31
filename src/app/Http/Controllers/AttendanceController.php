@@ -132,7 +132,7 @@ class AttendanceController extends Controller
 
         // ▼▼▼ 3. 完了メッセージ ▼▼▼
         return redirect()
-            ->route('attendance.show', $correction->id)
-            ->with('success', '修正申請を送信しました');
+            ->route('attendance.pendingDetail', $correction->id)
+            ->with('success', '修正申請を送信しました(承認待ち)');
     }
 }
