@@ -155,3 +155,25 @@ a.icon-right::after {
     background-repeat: no-repeat;
     transform: translateY(-50%) rotate(180deg);    /* 上下中央揃えにしてから180度回転 */
 }
+
+.csv-btn {
+    display: flex;
+    justify-content: right;
+    text-align: center;
+    margin-top: 60px;
+}
+
+.csv-button {
+    width: 184px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 5px;
+    background-color: #000000;
+
+    font-family: Inter;
+    font-weight: Bold;
+    font-size: 22px;
+    color: #FFFFFF;
+    
+    letter-spacing: 15%;
+}

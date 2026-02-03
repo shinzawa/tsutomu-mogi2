@@ -51,7 +51,7 @@
                     {{ $att?->work_minutes ? $att->work_minutes % 60 : ''}}
                 </td>
                 <td>@if($att)
-                    <a href="{{ route('admin.attendance.detail', $att->id) }}">
+                    <a href="{{ route('admin.attendance.show', ['attendance' => $att->id]) }}">
                         詳細
                     </a>
                     @else

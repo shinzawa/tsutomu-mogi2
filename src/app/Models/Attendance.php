@@ -56,4 +56,11 @@ class Attendance extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function isOnBreak()
+    {
+        $latest = $this->breaks()->orderBy('start', 'desc')->first();
+
+        return $latest && is_null($latest->end);
+    }
 }

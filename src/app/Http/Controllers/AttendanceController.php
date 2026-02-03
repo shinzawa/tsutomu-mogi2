@@ -11,6 +11,7 @@ use App\Http\Requests\CorrectionRequestAttendanceRequest;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
+
 class AttendanceController extends Controller
 {
     public function show()
@@ -24,14 +25,12 @@ class AttendanceController extends Controller
             ->first();
 
         $status = $user->status; // デフォルト
-dd($attendance);
+
         if ($attendance) {
-            if ($attendance->end_time === null) {
+            if ($attendance->clock_out === null) {
                 // 退勤していない場合
-                if ($attendance->break_start_time !== null && $attendance->break_end_time === null) {
+                if ($attendance->isOnBreak()) {
                     $status = '休憩中';
-                } elseif ($attendance->break_start_time !== null && $attendance->break_end_time !== null) {
-                    $status = '出勤中';
                 } else {
                     $status = '出勤中';
                 }
@@ -105,10 +104,11 @@ dd($attendance);
     //勤怠一覧画面（一般ユーザー）
     public function index(Request $request)
     {
-        // 現在の年月
-        $current = Carbon::now();
-        $year = $current->year;
-        $month = $current->month;
+        $year = $request->query('year', Carbon::now()->year);
+        $month = $request->query('month', Carbon::now()->month);
+
+        // Carbon インスタンスを指定年月で作成
+        $current = Carbon::create($year, $month, 1);
 
         // 前月・翌月
         $prev = $current->copy()->subMonth();
@@ -140,6 +140,7 @@ dd($attendance);
         return view('attendance.index', [
             'dates' => $dates,
             'attendanceMap' => $attendanceMap,
+            'userId' => $userId,
             'year' => $year,
             'month' => $month,
             'prevYear' => $prev->year,

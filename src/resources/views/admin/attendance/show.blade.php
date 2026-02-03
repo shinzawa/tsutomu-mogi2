@@ -19,10 +19,21 @@
         <h1>勤怠詳細</h1>
     </div>
     @php
+    $hasPendingRequest = \App\Models\CorrectionRequestAttendance::where('attendances_id', $attendance->id)
+    ->where('status', 'pending')
+    ->exists();
+    @endphp
+
+    @if ($hasPendingRequest)
+    <div class="alert alert-warning" style="margin-bottom: 20px;">
+        承認待ちのため修正はできません。
+    </div>
+    @endif
+    @php
     $breaks = $attendance->breaks;
     @endphp
     <div class="index-table">
-        <form action="{{ route('attendance.update', $attendance->id) }}" method="POST">
+        <form action="{{ route('admin.attendance.update', ['attendance' => $attendance->id]) }}" method="POST">
             @csrf
             @method('PUT')
             <table>
@@ -46,7 +57,8 @@
                         <input type="time"
                             name="clock_in"
                             class="form-control"
-                            value="{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}">
+                            value="{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}"
+                            {{ $hasPendingRequest ? 'disabled' : '' }}>
                     </td>
                     <td>
                         ～
@@ -55,7 +67,8 @@
                         <input type="time"
                             name="clock_out"
                             class="form-control"
-                            value="{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}">
+                            value="{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}"
+                            {{ $hasPendingRequest ? 'disabled' : '' }}>
                     </td>
 
                 </tr>
@@ -80,7 +93,8 @@
                         <input type="time"
                             name="break_start[{{ $i }}]"
                             class="form-control"
-                            value="{{ $break->start ? \Carbon\Carbon::parse($break->start)->format('H:i') : '' }}">
+                            value="{{ $break->start ? \Carbon\Carbon::parse($break->start)->format('H:i') : '' }}"
+                            {{ $hasPendingRequest ? 'disabled' : '' }}>
                     </td>
                     <td>
                         〜
@@ -89,7 +103,8 @@
                         <input type="time"
                             name="break_end[{{ $i }}]"
                             class=" form-control"
-                            value="{{ $break->end ? \Carbon\Carbon::parse($break->end)->format('H:i') : '' }}">
+                            value="{{ $break->end ? \Carbon\Carbon::parse($break->end)->format('H:i') : '' }}"
+                            {{ $hasPendingRequest ? 'disabled' : '' }}>
                     </td>
                     @else
                     <td>
@@ -111,6 +126,12 @@
                         </td>
                     </tr>
             </table>
-            <button type="submit" class="btn btn-primary">修正</button>
+            @if (!$hasPendingRequest)
+            <div class="right-align">
+                <button type="submit" class="btn btn-primary">修正</button>
+            </div>
+            @endif
         </form>
-        @endsection
+    </div>
+</div>
+@endsection

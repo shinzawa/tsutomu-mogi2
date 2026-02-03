@@ -20,10 +20,10 @@
         <h1>{{$user->name}}さんの勤怠一覧</h1>
     </div>
     <div class="month-link">
-        <a class="icon-left" href="{{ route('attendance.index', ['year' => $prevYear, 'month' => $prevMonth]) }}">前月</a>
+        <a class="icon-left" href="{{ route('admin.staff.attendance.index', ['id' =>$user->id, 'year' => $prevYear, 'month' => $prevMonth]) }}">前月</a>
         <h2 class="icon-left">{{ $year }}/{{ $month }}</h2>
 
-        <a class="icon-right" href="{{ route('attendance.index', ['year' => $nextYear, 'month' => $nextMonth]) }}">翌月</a>
+        <a class="icon-right" href="{{ route('admin.staff.attendance.index', ['id' =>$user->id, 'year' => $nextYear, 'month' => $nextMonth]) }}">翌月</a>
     </div>
     <div class="index-table">
         <table>
@@ -70,11 +70,11 @@
                     </td>
                     <td>
                         @if ($attendance)
-                        <a href="{{ route('admin.attendance.detail', $attendance->id) }}">
+                        <a href="{{ route('admin.attendance.show', ['attendance' => $attendance->id, 'user' => $user]) }}">
                             詳細
                         </a>
                         @else
-                        <a href="{{ route('admin.attendance.detail', -1) }}">
+                        <a href="{{ route('admin.attendance.show', ['attendance' => -1, 'user' => $user]) }}">
                             詳細
                         </a>
                         @endif
@@ -83,6 +83,13 @@
                 @endforeach
             </tbody>
         </table>
+    </div>
+    {{-- ▼ CSV 出力ボタン --}}
+    <div class="csv-btn">
+        <a class="csv-button"
+            href="{{ route('admin.attendance.exportCsv', ['user' => $user->id, 'year' => $year, 'month' => $month]) }}">
+            CSV出力
+        </a>
     </div>
 </div>
 @endsection
