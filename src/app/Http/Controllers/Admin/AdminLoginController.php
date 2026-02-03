@@ -14,6 +14,26 @@ class AdminLoginController extends Controller
     {
         return view('/admin/login');
     }
+    
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required',
+        ], [
+            'email.required' => 'メールアドレスを入力してください',
+            'password.required' => 'パスワードを入力してください',
+        ]);
+
+        // 認証処理
+        if (!Auth::guard('admin')->attempt($request->only('email', 'password'))) {
+            return back()->withErrors([
+                'email' => 'ログイン情報が登録されていません',
+            ]);
+        }
+
+        return redirect()->route('admin.dashboard');
+    }
 
     //ログアウト処理
     public function logout(Request $request)

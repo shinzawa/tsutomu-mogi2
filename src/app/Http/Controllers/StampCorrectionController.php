@@ -36,9 +36,10 @@ class StampCorrectionController extends Controller
 
     public function pendingDetail($id)
     {
+        $user = Auth::user();
         $correction = CorrectionRequestAttendance::with(['attendance', 'breaks'])
             ->findOrFail($id);
 
-        return view('stamp_correction.pending_detail', compact('correction'));
+        return view('stamp_correction.pending_detail', compact('correction', 'user'));
     }
 }

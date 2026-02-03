@@ -63,4 +63,8 @@ class Attendance extends Model
 
         return $latest && is_null($latest->end);
     }
+
+    protected $casts = [
+        'work_date' => 'date',
+    ];
 }

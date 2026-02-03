@@ -14,8 +14,8 @@ class AttendanceFactory extends Factory
         return [
             'user_id' => \App\Models\User::factory(),
             'work_date' => $this->faker->date(),
-            'clock_in' => $this->faker->dateTime(),
-            'clock_out' => $this->faker->dateTime(),
+            'clock_in' => null,
+            'clock_out' => null,
             'note' => 'テスト用メモ',
         ];
     }

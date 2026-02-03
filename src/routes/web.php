@@ -30,14 +30,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'show']);
     Route::get('/attendance/list', [AttendanceController::class, 'index'])->name('attendance.index');
     Route::get('/attendance/detail/{id}', [AttendanceController::class, 'detail'])->name('attendance.detail');
-    Route::get('/stamp_correction_request/list', [StampCorrectionController::class, 'index']);
+    Route::get('/stamp_correction_request/list', [StampCorrectionController::class, 'index'])->name('correction.index');
     Route::post('/attendance/detail/{id}', [AttendanceController::class, 'update'])->name('attendance.update');
-    Route::get('/stamp_correction_request/pending/{id}', [StampCorrectionController::class, 'pendingDetail'])->name('correction.pendingDetail');
+    Route::get('/stamp_correction_request/pending/{id}', [StampCorrectionController::class, 'pendingDetail'])->name('correction.show');
     Route::post('/attendance/updateStatus', [AttendanceController::class, 'updateStatus'])->name('attendance.updateStatus');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminLoginController::class, 'index'])->name('login.index');
+    Route::post('/login', [AdminLoginController::class, 'login'])->name('admin.login');
     Route::get('/logout', [AdminLoginController::class, 'logout'])->name('login.logout');
 
     Route::middleware(['auth:admin'])->group(function () {
