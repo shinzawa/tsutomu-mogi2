@@ -89,3 +89,55 @@ table td:nth-child(3), table th:nth-child(3) {
   padding-left: 0px;
   padding-right: 0px;
 }
+
+.day-link {
+    width: 900px;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 10px;
+    padding-left: 25px;
+    padding-right: 25px;
+    background-color: #FFFFFF;
+    margin-bottom: 46px;
+    align-items: center;    
+}
+
+a.icon-left {
+    text-decoration: none;
+    padding-left: 25px;
+    background-image: url('/img/arrow.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 16px 16px;
+}
+
+h2.icon-left {
+    font-weight: bold;
+    font-size: 20px;
+    text-decoration: none;
+    padding-left: 25px;
+    background-image: url('/img/calender.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 16px 16px;
+}
+
+a.icon-right {
+    position: relative;
+    padding-right: 25px; /* アイコンのスペース */
+    text-decoration: none;
+}
+
+a.icon-right::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 20px;  /* 画像の幅 */
+    height: 15px; /* 画像の高さ */
+    background-image: url('/img/arrow.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: translateY(-50%) rotate(180deg);    /* 上下中央揃えにしてから180度回転 */
+}

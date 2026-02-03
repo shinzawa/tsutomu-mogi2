@@ -15,8 +15,93 @@ class AttendanceController extends Controller
 {
     public function show()
     {
-        return view('/attendance/record');
+        $user = auth()->user();
+        $today = now()->startOfDay();
+
+        // 本日の出勤データを取得（例：出勤時間があるレコード）
+        $attendance = Attendance::where('user_id', $user->id)
+            ->whereDate('work_date', $today)
+            ->first();
+
+        $status = $user->status; // デフォルト
+dd($attendance);
+        if ($attendance) {
+            if ($attendance->end_time === null) {
+                // 退勤していない場合
+                if ($attendance->break_start_time !== null && $attendance->break_end_time === null) {
+                    $status = '休憩中';
+                } elseif ($attendance->break_start_time !== null && $attendance->break_end_time !== null) {
+                    $status = '出勤中';
+                } else {
+                    $status = '出勤中';
+                }
+            } else {
+                $status = '退勤済';
+            }
+        }
+
+        return view('attendance.record', compact('status', 'attendance'));
     }
+
+    public function updateStatus(Request $request)
+    {
+        $user = auth()->user();
+        $action = $request->input('action');
+        $today = now()->toDateString();
+
+        // 今日の勤怠レコード
+        $attendance = Attendance::firstOrCreate(
+            ['user_id' => $user->id, 'work_date' => $today]
+        );
+
+        switch ($action) {
+
+            case 'clock_in':
+                // 出勤 → レコード作成
+                // 出勤は1回だけ
+                if (!$attendance->clock_in) {
+                    $attendance->clock_in = now();
+                    $attendance->save();
+                }
+                $user->status = '出勤中';
+                break;
+
+            case 'break_in':
+                // 休憩開始 → breaks に新規レコード
+                $attendance->breaks()->create([
+                    'start' => now(),
+                ]);
+                $user->status = '休憩中';
+                break;
+
+            case 'break_out':
+                // 最後の break の break_out を更新
+                $lastBreak = $attendance->breaks()->latest()->first();
+
+                if ($lastBreak && !$lastBreak->break_out) {
+                    $lastBreak->update([
+                        'end' => now(),
+                    ]);
+                }
+
+                $user->status = '出勤中';
+                break;
+
+            case 'clock_out':
+                // 退勤は1回だけ
+                if (!$attendance->clock_out) {
+                    $attendance->clock_out = now();
+                    $attendance->save();
+                }
+                $user->status = '退勤済';
+                break;
+        }
+
+        $user->save();
+
+        return back();
+    }
+
     //勤怠一覧画面（一般ユーザー）
     public function index(Request $request)
     {
@@ -62,7 +147,6 @@ class AttendanceController extends Controller
             'nextYear' => $next->year,
             'nextMonth' => $next->month,
         ]);
-
     }
 
     public function detail(Request $request, $id)
@@ -70,7 +154,7 @@ class AttendanceController extends Controller
         // $id はAttendanceのprime index
         $userId = Auth::id();
         $user = User::find($userId);
-        if ($id>0) {
+        if ($id > 0) {
             $attendance = Attendance::with('breaks')->findOrFail($id);
             // ログインユーザー以外のデータを見れないようにする。
             // TODO: でもエラーを仕込んでよいのかでもエラーを仕込んでよいのか

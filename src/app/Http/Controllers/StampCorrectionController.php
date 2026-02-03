@@ -39,11 +39,6 @@ class StampCorrectionController extends Controller
         $correction = CorrectionRequestAttendance::with(['attendance', 'breaks'])
             ->findOrFail($id);
 
-        // 一般ユーザーは自分の申請のみ閲覧可能
-        if ($correction->user_id !== auth()->id()) {
-            abort(403);
-        }
-        $user = Auth::user();
-        return view('stamp_correction.pending_detail', compact('correction', 'user'));
+        return view('stamp_correction.pending_detail', compact('correction'));
     }
 }

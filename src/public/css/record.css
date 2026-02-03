@@ -1,0 +1,78 @@
+.attendance-container {
+  width:100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.status-badge {
+  font-size: 18px;
+  font-weight: bold;
+  width: 100px;
+  height: 40px;
+  border: 1px solid #C8C8C8;
+  border-radius: 50px;
+  line-height: 40px;
+  background-color: #C8C8C8;
+  display:flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  margin-top: 100px;
+  margin-bottom: 37px;
+}
+
+.date-display {
+  font-size: 40px;
+  font-weight: normal;
+  color: #000000;
+  margin-bottom: 54px;
+}
+
+.time-display {
+  font-size: 80px;
+  font-weight: bold;
+  color: #000000;
+  margin-bottom: 103px;
+}
+
+.buttons-group {
+  width: 524px;
+  display:flex;
+  justify-content: space-between;
+}
+
+.button-group {
+  width: 221px;
+  height: 77px;
+  display:flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  border-radius: 20px;
+  margin-top: 20px;
+  cursor: pointer;
+  border: 1px solid #000000;
+}
+
+.clock_in, .clock_out {
+  font-size: 32px;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+.button-group.clock_in-btn, .clock_out-btn 
+{
+  background-color: #000000;
+}
+
+.break_in, .break_out {
+  font-size: 32px;
+  font-weight: bold;
+  color: #000000;
+}
+
+.break_in-btn, .button-group.break_out-btn {
+  background-color: #FFFFFF;
+}
