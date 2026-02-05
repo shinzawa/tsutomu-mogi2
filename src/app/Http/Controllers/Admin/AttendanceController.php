@@ -35,7 +35,7 @@ class AttendanceController extends Controller
 
         // 全スタッフを取得しつつ、その日の勤怠を eager load
         $users = User::with(['attendances' => function ($query) use ($date) {
-            $query->where('workDate', $date);
+            $query->where('work_date', $date);
         }])->orderBy('name')->get();
 
         return view('admin.attendance.index', [
@@ -103,14 +103,18 @@ class AttendanceController extends Controller
 
         // 当月の勤怠データを取得
         $attendances = Attendance::where('user_id', $userId)
-            ->whereYear('workDate', $year)
-            ->whereMonth('workDate', $month)
+            ->whereYear('work_date', $year)
+            ->whereMonth('work_date', $month)
             ->with('breaks') // 休憩時間も取得
-            ->orderBy('workDate')
+            ->orderBy('work_date')
             ->get();
 
         // 勤怠データを日付キーでまとめる
-        $attendanceMap = $attendances->keyBy('workDate');
+        $attendanceMap = $attendances->mapWithKeys(function ($attendance) {
+            return [
+                $attendance->work_date->format('Y-m-d') => $attendance
+            ];
+        });
 
         return view('admin.staff.attendance.index', [
             'user' => $user,
@@ -180,10 +184,10 @@ class AttendanceController extends Controller
 
         // 指定月の勤怠データ取得
         $attendances = Attendance::where('user_id', $user->id)
-            ->whereYear('workDate', $year)
-            ->whereMonth('workDate', $month)
+            ->whereYear('work_date', $year)
+            ->whereMonth('work_date', $month)
             ->with('breaks')
-            ->orderBy('workDate')
+            ->orderBy('work_date')
             ->get();
 
         $fileName = "{$user->name}_{$year}-{$month}_attendance.csv";
@@ -212,7 +216,7 @@ class AttendanceController extends Controller
                 })->implode(' / ');
 
                 fputcsv($stream, [
-                    $a->workDate,
+                    $a->work_date,
                     optional($a->clock_in)->format('H:i'),
                     optional($a->clock_out)->format('H:i'),
                     $a->total_break_minutes,
