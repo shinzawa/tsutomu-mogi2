@@ -27,9 +27,9 @@ class CorrectionRequestAttendanceRequest extends FormRequest
     {
         $validator->after(function ($validator) {
 
-            $attendance = $this->route('id')
-                ? \App\Models\Attendance::find($this->route('id'))
-                : null;
+            $id = $this->route('id') ?? $this->route('attendance');
+
+            $attendance = $id ? \App\Models\Attendance::find($id) : null;
 
             if (!$attendance) {
                 return;
@@ -41,8 +41,15 @@ class CorrectionRequestAttendanceRequest extends FormRequest
             $clockIn  = Carbon::parse($workDate . ' ' . $this->clock_in);
             $clockOut = Carbon::parse($workDate . ' ' . $this->clock_out);
 
+            // ▼ ルート名で判定
+            $isAdmin = str_starts_with($this->route()->getName(), 'admin.');
+            // ▼ メッセージを分岐
+            $message = $isAdmin
+                ? '出勤時間もしくは退勤時間が不適切な値です'
+                : '出勤時間が不適切な値です';
+
             if ($clockIn->gt($clockOut)) {
-                $validator->errors()->add('clock_in', '出勤時間が不適切な値です');
+                $validator->errors()->add('clock_in', $message);
             }
 
             // 休憩開始・終了の比較

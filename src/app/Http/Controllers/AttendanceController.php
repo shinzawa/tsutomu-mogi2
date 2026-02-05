@@ -9,8 +9,6 @@ use App\Models\CorrectionRequestBreakTime;
 use App\Models\User;
 use App\Http\Requests\CorrectionRequestAttendanceRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 
@@ -178,7 +176,6 @@ class AttendanceController extends Controller
 
     public function update(CorrectionRequestAttendanceRequest $request, $id)
     {
-        Log::info('update start');
         $attendance = Attendance::with('breaks')->findOrFail($id);
 
         // ログインユーザー以外は編集不可
@@ -188,7 +185,6 @@ class AttendanceController extends Controller
 
         $workDate = Carbon::parse($attendance->work_date)->toDateString();
         // ▼▼▼ 1. 修正申請（correction_request_attendances）を作成 ▼▼▼
-        Log::info('before create correction');
         $correction = CorrectionRequestAttendance::create([
             'attendances_id'       => $attendance->id,
             'user_id'              => Auth::id(),
@@ -216,7 +212,6 @@ class AttendanceController extends Controller
                     continue;
                 }
                 // 修正申請用の休憩を保存
-                Log::info('before create break');
                 CorrectionRequestBreakTime::create([
                     'request_id' => $correction->id,
                     'start'      => $workDate . ' ' . $start,
@@ -224,12 +219,7 @@ class AttendanceController extends Controller
                 ]);
             }
         }
-        Log::info('update before redirect');
-        // dd(
-        //     CorrectionRequestAttendance::all()->toArray(),
-        //     CorrectionRequestBreakTime::all()->toArray()
-        // );
-        // dd(DB::table('correction_request_attendances')->get());
+
         // ▼▼▼ 3. 完了メッセージ ▼▼▼
         return redirect()
             ->route('correction.show', ['id' => $correction->id])

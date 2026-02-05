@@ -35,7 +35,7 @@ class AttendanceController extends Controller
 
         // 全スタッフを取得しつつ、その日の勤怠を eager load
         $users = User::with(['attendances' => function ($query) use ($date) {
-            $query->where('work_date', $date);
+            $query->where('workDate', $date);
         }])->orderBy('name')->get();
 
         return view('admin.attendance.index', [
@@ -103,14 +103,14 @@ class AttendanceController extends Controller
 
         // 当月の勤怠データを取得
         $attendances = Attendance::where('user_id', $userId)
-            ->whereYear('work_date', $year)
-            ->whereMonth('work_date', $month)
+            ->whereYear('workDate', $year)
+            ->whereMonth('workDate', $month)
             ->with('breaks') // 休憩時間も取得
-            ->orderBy('work_date')
+            ->orderBy('workDate')
             ->get();
 
         // 勤怠データを日付キーでまとめる
-        $attendanceMap = $attendances->keyBy('work_date');
+        $attendanceMap = $attendances->keyBy('workDate');
 
         return view('admin.staff.attendance.index', [
             'user' => $user,
@@ -125,7 +125,9 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    
+
+    public function update(CorrectionRequestAttendanceRequest $request, $id)
     {
         $attendance = Attendance::with('breaks')->findOrFail($id);
 
@@ -138,9 +140,10 @@ class AttendanceController extends Controller
             return back()->with('error', '承認待ちのため修正はできません。');
         }
 
+        $workDate = Carbon::parse($attendance->work_date)->toDateString();
         // ▼ 2. 管理者による直接修正（申請は発行しない）
-        $attendance->clock_in  = $request->clock_in ? $attendance->work_date . ' ' . $request->clock_in : null;
-        $attendance->clock_out = $request->clock_out ? $attendance->work_date . ' ' . $request->clock_out : null;
+        $attendance->clock_in  = $request->clock_in ?  $workDate . ' ' . $request->clock_in : null;
+        $attendance->clock_out = $request->clock_out ? $workDate . ' ' . $request->clock_out : null;
         $attendance->note      = $request->note;
         $attendance->save();
 
@@ -160,8 +163,8 @@ class AttendanceController extends Controller
             }
 
             $attendance->breaks()->create([
-                'start' => $attendance->work_date . ' ' . $start,
-                'end'   => $attendance->work_date . ' ' . $end,
+                'start' => $workDate . ' ' . $start,
+                'end'   => $workDate . ' ' . $end,
             ]);
         }
 
@@ -177,10 +180,10 @@ class AttendanceController extends Controller
 
         // 指定月の勤怠データ取得
         $attendances = Attendance::where('user_id', $user->id)
-            ->whereYear('work_date', $year)
-            ->whereMonth('work_date', $month)
+            ->whereYear('workDate', $year)
+            ->whereMonth('workDate', $month)
             ->with('breaks')
-            ->orderBy('work_date')
+            ->orderBy('workDate')
             ->get();
 
         $fileName = "{$user->name}_{$year}-{$month}_attendance.csv";
@@ -209,7 +212,7 @@ class AttendanceController extends Controller
                 })->implode(' / ');
 
                 fputcsv($stream, [
-                    $a->work_date,
+                    $a->workDate,
                     optional($a->clock_in)->format('H:i'),
                     optional($a->clock_out)->format('H:i'),
                     $a->total_break_minutes,
