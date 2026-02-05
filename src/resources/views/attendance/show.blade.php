@@ -47,6 +47,11 @@
                             class="form-control"
                             value="{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}">
                     </td>
+                    <div class="form__error">
+                        @error('clock_in')
+                        {{ $message }}
+                        @enderror
+                    </div>
                     <td>
                         ～
                     </td>
@@ -56,8 +61,13 @@
                             class="form-control"
                             value="{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}">
                     </td>
-
+                    <div class="form__error">
+                        @error('clock_out')
+                        {{ $message }}
+                        @enderror
+                    </div>
                 </tr>
+
                 {{-- ▼ 休憩時間の詳細行を動的に生成 --}}
                 @php
                 $breaks = $attendance->breaks;
@@ -81,6 +91,11 @@
                             class="form-control"
                             value="{{ $break->start ? \Carbon\Carbon::parse($break->start)->format('H:i') : '' }}">
                     </td>
+                    <div class="form__error">
+                        @error('break_start.' . $i)
+                        {{ $message }}
+                        @enderror
+                    </div>
                     <td>
                         〜
                     </td>
@@ -90,6 +105,11 @@
                             class=" form-control"
                             value="{{ $break->end ? \Carbon\Carbon::parse($break->end)->format('H:i') : '' }}">
                     </td>
+                    <div class="form__error">
+                        @error('break_end.' . $i)
+                        {{ $message }}
+                        @enderror
+                    </div>
                     @else
                     <td>
                         <input type="time"
@@ -97,6 +117,11 @@
                             class="form-control"
                             value="">
                     </td>
+                    <div class="form__error">
+                        @error('break_start.' . $i)
+                        {{ $message }}
+                        @enderror
+                    </div>
                     <td>
                         〜
                     </td>
@@ -106,7 +131,12 @@
                             class=" form-control"
                             value="">
                     </td>
-                      @endif
+                    <div class="form__error">
+                        @error('break_end.' . $i)
+                        {{ $message }}
+                        @enderror
+                    </div>  
+                    @endif
                     </tr>
                     @endfor
                     <tr>
@@ -114,6 +144,11 @@
                         <td>
                             <textarea name="note" class="form-control" rows="3">{{ $attendance->note }}</textarea>
                         </td>
+                        <div class="form__error">
+                        @error('note')
+                        {{ $message }}
+                        @enderror
+                        </div>  
                     </tr>
             </table>
             <div class="right-align">

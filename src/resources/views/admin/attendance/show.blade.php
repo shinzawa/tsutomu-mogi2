@@ -60,6 +60,11 @@
                             value="{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}"
                             {{ $hasPendingRequest ? 'disabled' : '' }}>
                     </td>
+                    <div class="form__error">
+                        @error('clock_in')
+                        {{ $message }}
+                        @enderror
+                    </div>
                     <td>
                         ～
                     </td>
@@ -70,7 +75,11 @@
                             value="{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}"
                             {{ $hasPendingRequest ? 'disabled' : '' }}>
                     </td>
-
+                    <div class="form__error">
+                        @error('clock_out')
+                        {{ $message }}
+                        @enderror
+                    </div>
                 </tr>
                 {{-- ▼ 休憩時間の詳細行を動的に生成 --}}
                 @php
@@ -96,6 +105,11 @@
                             value="{{ $break->start ? \Carbon\Carbon::parse($break->start)->format('H:i') : '' }}"
                             {{ $hasPendingRequest ? 'disabled' : '' }}>
                     </td>
+                    <div class="form__error">
+                        @error('break_start.' . $i)
+                        {{ $message }}
+                        @enderror
+                    </div>
                     <td>
                         〜
                     </td>
@@ -106,6 +120,11 @@
                             value="{{ $break->end ? \Carbon\Carbon::parse($break->end)->format('H:i') : '' }}"
                             {{ $hasPendingRequest ? 'disabled' : '' }}>
                     </td>
+                    <div class="form__error">
+                        @error('break_end.' . $i)
+                        {{ $message }}
+                        @enderror
+                    </div>
                     @else
                     <td>
                         {{-- 空欄 --}}
@@ -124,6 +143,11 @@
                         <td>
                             <textarea name="note" class="form-control" rows="3">{{ $attendance->note }}</textarea>
                         </td>
+                        <div class="form__error">
+                        @error('note')
+                        {{ $message }}
+                        @enderror
+                        </div>
                     </tr>
             </table>
             @if (!$hasPendingRequest)
