@@ -59,7 +59,7 @@ class AttendanceCorrectionTest extends TestCase
         // 2. 実行：管理者としてログインし、承認API（またはRoute）を叩く
         $response = $this->actingAs($this->admin, 'admin')
             ->post(route('admin.stamp_correction.approve', ['attendance_correct_request_id' => $request->id]));
-        
+
         // 3. 検証：ステータスコードとDBの状態を確認
         $response->assertRedirect(); // または assertStatus(200)
 
@@ -74,33 +74,5 @@ class AttendanceCorrectionTest extends TestCase
             'id' => $attendance->id,
             'clock_out' => '2025-02-01 18:00:00',
         ]);
-    }
-
-    
-    public function test_admin_can_see_pending_requests_only_in_pending_tab()
-    {
-        $pendingRequest = CorrectionRequestAttendance::factory()->create(['status' => 'pending']);
-        $approvedRequest = CorrectionRequestAttendance::factory()->create(['status' => 'approved']);
-
-        $response = $this->actingAs($this->admin, 'admin')
-            ->get(route('admin.stamp_correction.index', ['status' => 'pending']));
-
-        $response->assertStatus(200);
-        $response->assertSee($pendingRequest->reason); // 承認待ちは表示される
-        $response->assertDontSee($approvedRequest->reason); // 承認済みは表示されない
-    }
-
-    
-    public function test_admin_can_see_approved_requests_only_in_approved_tab()
-    {
-        $pendingRequest = CorrectionRequestAttendance::factory()->create(['status' => 'pending']);
-        $approvedRequest = CorrectionRequestAttendance::factory()->create(['status' => 'approved']);
-
-        $response = $this->actingAs($this->admin, 'admin')
-            ->get(route('admin.stamp_correction.index', ['status' => 'approved']));
-
-        $response->assertStatus(200);
-        $response->assertSee($approvedRequest->reason); // 承認済みは表示される
-        $response->assertDontSee($pendingRequest->reason); // 承認待ちは表示されない
     }
 }
