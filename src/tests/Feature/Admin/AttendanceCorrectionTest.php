@@ -76,7 +76,7 @@ class AttendanceCorrectionTest extends TestCase
         ]);
     }
 
-    /** @test */
+    
     public function test_admin_can_see_pending_requests_only_in_pending_tab()
     {
         $pendingRequest = CorrectionRequestAttendance::factory()->create(['status' => 'pending']);
@@ -90,7 +90,7 @@ class AttendanceCorrectionTest extends TestCase
         $response->assertDontSee($approvedRequest->reason); // 承認済みは表示されない
     }
 
-    /** @test */
+    
     public function test_admin_can_see_approved_requests_only_in_approved_tab()
     {
         $pendingRequest = CorrectionRequestAttendance::factory()->create(['status' => 'pending']);

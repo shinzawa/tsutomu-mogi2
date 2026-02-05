@@ -188,7 +188,7 @@ class AttendanceActionTest extends TestCase
         // 勤怠一覧画面
         $response = $this->actingAs($user)->get('/attendance/list');
 
-        $response->assertSee('2024/1');
+        $response->assertSee('2024/01');
         $response->assertSee('01/01');
     }
 
