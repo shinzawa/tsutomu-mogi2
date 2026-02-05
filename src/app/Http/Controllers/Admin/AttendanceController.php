@@ -174,7 +174,7 @@ class AttendanceController extends Controller
     {
         $year = $request->year;
         $month = $request->month;
-dd($user);
+
         // 指定月の勤怠データ取得
         $attendances = Attendance::where('user_id', $user->id)
             ->whereYear('work_date', $year)

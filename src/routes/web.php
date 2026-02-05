@@ -27,11 +27,11 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 */
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/attendance', [AttendanceController::class, 'show']);
+    Route::get('/attendance', [AttendanceController::class, 'show'])->name('attendance.show');
     Route::get('/attendance/list', [AttendanceController::class, 'index'])->name('attendance.index');
+    Route::post('/attendance/update/{id}', [AttendanceController::class, 'update'])->name('attendance.update');
     Route::get('/attendance/detail/{id}', [AttendanceController::class, 'detail'])->name('attendance.detail');
     Route::get('/stamp_correction_request/list', [StampCorrectionController::class, 'index'])->name('correction.index');
-    Route::post('/attendance/detail/{id}', [AttendanceController::class, 'update'])->name('attendance.update');
     Route::get('/stamp_correction_request/pending/{id}', [StampCorrectionController::class, 'pendingDetail'])->name('correction.show');
     Route::post('/attendance/updateStatus', [AttendanceController::class, 'updateStatus'])->name('attendance.updateStatus');
 });

@@ -20,9 +20,9 @@
     </div>
     <div class="month-link">
         <a class="icon-left" href="{{ route('attendance.index', ['year' => $prevYear, 'month' => $prevMonth]) }}">前月</a>
-        <h2 class="icon-left" >{{ $year }}/{{ $month }}</h2>
+        <h2 class="icon-left">{{ $year }}/{{ sprintf('%02d',$month) }}</h2>
 
-        <a class="icon-right"  href="{{ route('attendance.index', ['year' => $nextYear, 'month' => $nextMonth]) }}">翌月</a>
+        <a class="icon-right" href="{{ route('attendance.index', ['year' => $nextYear, 'month' => $nextMonth]) }}">翌月</a>
     </div>
     <div class="index-table">
         <table>

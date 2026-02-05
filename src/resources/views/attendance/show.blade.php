@@ -36,7 +36,7 @@
                     </td>
                     <td></td>
                     <td>
-                        {{ \Carbon\Carbon::parse($attendance->work_date)->format('n月 j日') }}
+                        {{ \Carbon\Carbon::parse($attendance->work_date)->format('n月j日') }}
                     </td>
                 </tr>
                 <tr>

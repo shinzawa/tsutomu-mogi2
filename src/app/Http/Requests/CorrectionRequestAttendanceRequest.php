@@ -35,7 +35,7 @@ class CorrectionRequestAttendanceRequest extends FormRequest
                 return;
             }
 
-            $workDate = $attendance->work_date;
+            $workDate = $attendance->work_date->format('Y-m-d');
 
             // 出勤・退勤の比較
             $clockIn  = Carbon::parse($workDate . ' ' . $this->clock_in);

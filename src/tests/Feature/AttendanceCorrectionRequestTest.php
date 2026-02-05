@@ -23,6 +23,8 @@ class AttendanceCorrectionRequestTest extends TestCase
         parent::setUp();
 
         $this->user = User::factory()->create();
+        $this->user->email_verified_at = now();
+        $this->user->save();
         $this->admin = Admin::factory()->create();
 
         $this->attendance = Attendance::factory()->create([
@@ -37,12 +39,12 @@ class AttendanceCorrectionRequestTest extends TestCase
     public function 出勤時間が退勤時間より後ならエラーになる()
     {
         $response = $this->actingAs($this->user)
-            ->post(route('attendance.update', $this->attendance->id), [
+            ->post(route('attendance.update', ['id' => $this->attendance->id]), [
                 'clock_in' => '19:00',
                 'clock_out' => '18:00',
                 'note' => 'test',
             ]);
-
+        $response->assertStatus(302);
         $response->assertSessionHasErrors(['clock_in']);
         $this->assertEquals(
             '出勤時間が不適切な値です',
@@ -109,14 +111,15 @@ class AttendanceCorrectionRequestTest extends TestCase
     public function 修正申請が作成される()
     {
         $response = $this->actingAs($this->user)
-            ->post(route('attendance.update', $this->attendance->id), [
+            ->post(route('attendance.update', ['id' => $this->attendance->id]), [
                 'clock_in' => '08:00',
                 'clock_out' => '17:00',
                 'break_start' => ['12:00'],
                 'break_end' => ['12:30'],
                 'note' => '修正理由',
             ]);
-
+        // dd($response->headers->get('Location'));
+        // dd($response->status(), $response->getContent(), session('errors'));
         $response->assertSessionHasNoErrors();
 
         $this->assertDatabaseHas('correction_request_attendances', [

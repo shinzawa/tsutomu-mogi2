@@ -9,6 +9,8 @@ use App\Models\CorrectionRequestBreakTime;
 use App\Models\User;
 use App\Http\Requests\CorrectionRequestAttendanceRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 
@@ -135,7 +137,11 @@ class AttendanceController extends Controller
             ->get();
 
         // 勤怠データを日付キーでまとめる
-        $attendanceMap = $attendances->keyBy('work_date');
+        $attendanceMap = $attendances->mapWithKeys(function ($attendance) {
+            return [
+                $attendance->work_date->format('Y-m-d') => $attendance
+            ];
+        });
 
         return view('attendance.index', [
             'dates' => $dates,
@@ -172,6 +178,7 @@ class AttendanceController extends Controller
 
     public function update(CorrectionRequestAttendanceRequest $request, $id)
     {
+        Log::info('update start');
         $attendance = Attendance::with('breaks')->findOrFail($id);
 
         // ログインユーザー以外は編集不可
@@ -179,12 +186,14 @@ class AttendanceController extends Controller
             abort(403);
         }
 
+        $workDate = Carbon::parse($attendance->work_date)->toDateString();
         // ▼▼▼ 1. 修正申請（correction_request_attendances）を作成 ▼▼▼
+        Log::info('before create correction');
         $correction = CorrectionRequestAttendance::create([
             'attendances_id'       => $attendance->id,
             'user_id'              => Auth::id(),
-            'requested_clock_in'   => $attendance->work_date . ' ' . $request->clock_in,
-            'requested_clock_out'  => $attendance->work_date . ' ' . $request->clock_out,
+            'requested_clock_in'   => $workDate . ' ' . $request->clock_in,
+            'requested_clock_out'  => $workDate . ' ' . $request->clock_out,
             'reason'               => $request->note,
             'status'               => 'pending',
         ]);
@@ -207,17 +216,23 @@ class AttendanceController extends Controller
                     continue;
                 }
                 // 修正申請用の休憩を保存
+                Log::info('before create break');
                 CorrectionRequestBreakTime::create([
                     'request_id' => $correction->id,
-                    'start'      => $attendance->work_date . ' ' . $start,
-                    'end'        => $attendance->work_date . ' ' . $end,
+                    'start'      => $workDate . ' ' . $start,
+                    'end'        => $workDate . ' ' . $end,
                 ]);
             }
         }
-
+        Log::info('update before redirect');
+        // dd(
+        //     CorrectionRequestAttendance::all()->toArray(),
+        //     CorrectionRequestBreakTime::all()->toArray()
+        // );
+        // dd(DB::table('correction_request_attendances')->get());
         // ▼▼▼ 3. 完了メッセージ ▼▼▼
         return redirect()
-            ->route('attendance.pendingDetail', $correction->id)
+            ->route('correction.show', ['id' => $correction->id])
             ->with('success', '修正申請を送信しました(承認待ち)');
     }
 }

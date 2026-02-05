@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CorrectionRequestAttendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Log;
 class StampCorrectionController extends Controller
 {
     public function show($id)
@@ -36,10 +36,11 @@ class StampCorrectionController extends Controller
 
     public function pendingDetail($id)
     {
+        Log::info('pendigDetail start');
         $user = Auth::user();
         $correction = CorrectionRequestAttendance::with(['attendance', 'breaks'])
             ->findOrFail($id);
-
+        Log::info('pendigDetail before end');
         return view('stamp_correction.pending_detail', compact('correction', 'user'));
     }
 }
