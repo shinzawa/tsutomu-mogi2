@@ -21,7 +21,6 @@ name: 管理者1
 email: admin1@gmail.com
 password: password
 -------------------------
-
 name: 西 伶奈
 email: reina.n@coachtech.com
 password: password
@@ -30,7 +29,6 @@ name: 山田 太郎
 email: taro.y@coachtech.com
 password: password
 -------------------------
-
 name: 増田 一世
 email: issei.m@coachtech.com
 password: password
@@ -38,7 +36,7 @@ password: password
 name: 山本 敬吉
 email: keikichi.y@coachtech.com
 password: password
-
+-------------------------
 name: 秋田 朋美
 email: tomomi.a@coachtech.com
 password: password
@@ -46,9 +44,10 @@ password: password
 name: 中西 教夫
 email: norio.n@coachtech.com
 password: password
+-------------------------
 
 ## PHPUnitを利用したテストに関して
-以下のコマンド:  
+以下のコマンド:
 ```
 //テスト用データベースの作成
 docker-compose exec mysql bash
