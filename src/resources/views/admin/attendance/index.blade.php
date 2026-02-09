@@ -20,10 +20,10 @@
         <h1>勤怠一覧</h1>
     </div>
     <div class="day-link">
-        <a class="icon-left" href="{{ route('admin.stamp_correction.index', ['year' => $prevYear, 'month' => $prevMonth, 'day' => $prevDay], ) }}">前日</a>
+        <a class="icon-left" href="{{ route('admin.attendance.index', ['year' => $prevYear, 'month' => $prevMonth, 'day' => $prevDay], ) }}">前日</a>
         <h2 class="icon-left">{{ $year }}/{{ $month }}/{{ $day }}</h2>
 
-        <a class="icon-right" href="{{ route('admin.stamp_correction.index', ['year' => $nextYear, 'month' => $nextMonth, 'day'=> $nextDay]) }}">翌日</a>
+        <a class="icon-right" href="{{ route('admin.attendance.index', ['year' => $nextYear, 'month' => $nextMonth, 'day'=> $nextDay]) }}">翌日</a>
     </div>
     <div class="staff-daily-attendances-table">
         <table>

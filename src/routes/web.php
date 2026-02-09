@@ -42,7 +42,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/logout', [AdminLoginController::class, 'logout'])->name('login.logout');
 
     Route::middleware(['auth:admin'])->group(function () {
-        Route::get('/attendance/list', [AdminAttendanceController::class, 'list'])->name('attendance.list');
+        Route::get('/attendance/list', [AdminAttendanceController::class, 'list'])->name('attendance.index');
         Route::resource('attendance', AdminAttendanceController::class)->only(['show', 'update']);
         Route::get('/staff/list', [AdminAttendanceController::class, 'staffIndex'])->name('staff.list');
         Route::get('/attendance/staff/{id}', [AdminAttendanceController::class, 'index'])->name('staff.attendance.index');
