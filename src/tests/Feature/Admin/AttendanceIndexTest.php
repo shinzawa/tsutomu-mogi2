@@ -69,7 +69,7 @@ class AttendanceIndexTest extends TestCase
     public function 管理者はその日の全ユーザーの勤怠情報を確認できる()
     {
         $response = $this->actingAs($this->admin, 'admin')
-            ->get(route('admin.attendance.list'));
+            ->get(route('admin.attendance.index'));
         
         $response->assertStatus(200);
 
@@ -88,7 +88,7 @@ class AttendanceIndexTest extends TestCase
     public function 一覧画面に今日の日付が表示される()
     {
         $response = $this->actingAs($this->admin, 'admin')
-            ->get(route('admin.attendance.list'));
+            ->get(route('admin.attendance.index'));
 
         $response->assertStatus(200);
         $response->assertSee(today()->format('Y/n/j'));
@@ -107,7 +107,7 @@ class AttendanceIndexTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->admin, 'admin')
-            ->get(route('admin.attendance.list', ['year' => $year, 'month' => $month, 'day' => $day, 'date' => $yesterday]));
+            ->get(route('admin.attendance.index', ['year' => $year, 'month' => $month, 'day' => $day, 'date' => $yesterday]));
 
         $yesterday = today()->subDay()->format('Y/n/j');
         $response->assertStatus(200);
@@ -132,7 +132,7 @@ class AttendanceIndexTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->admin, 'admin')
-            ->get(route('admin.attendance.list', ['year' => $year, 'month' => $month, 'day' => $day, 'date' => $tomorrow]));
+            ->get(route('admin.attendance.index', ['year' => $year, 'month' => $month, 'day' => $day, 'date' => $tomorrow]));
 
         $tomorrow = today()->addDay()->format('Y/n/j');
         $response->assertStatus(200);
