@@ -136,7 +136,7 @@ class AttendanceController extends Controller
         $attendance = Attendance::with('breaks')->findOrFail($id);
 
         // ▼ 1. 承認待ちの修正申告があるかチェック
-        $hasPendingRequest = CorrectionRequestAttendance::where('attendance_id', $attendance->id)
+        $hasPendingRequest = CorrectionRequestAttendance::where('attendances_id', $attendance->id)
             ->where('status', 'pending')
             ->exists();
 
