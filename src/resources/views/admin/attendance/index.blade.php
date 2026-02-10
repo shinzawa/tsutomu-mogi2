@@ -44,7 +44,7 @@
                 <td>{{ $user->name }} </td>
                 <td>{{ $att?->clock_in ? \Carbon\Carbon::parse($att->clock_in)->format('H:i') : '' }} </td>
                 <td>{{ $att?->clock_out ? \Carbon\Carbon::parse($att->clock_out)->format('H:i') : ''}} </td>
-                <td>{{ $att?->tatl_break_minutes ? sprintf('%d:%02d', floor($att->total_break_minutes / 60), $att->total_break_minutes % 60) : '' }}
+                <td>{{ $att?->total_break_minutes ? sprintf('%d:%02d', floor($att->total_break_minutes / 60), $att->total_break_minutes % 60) : '' }}
                 </td>
                 <td>{{ $att?->work_minutes ? floor($att->work_minutes / 60) : '' }}
                     :

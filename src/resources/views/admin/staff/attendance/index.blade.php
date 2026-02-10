@@ -60,7 +60,7 @@
                             : '' }}
                     </td>
                     <td>
-                        {{ $attendance->total_break_minutes ?? ''}}
+                        {{ $attendance?->total_break_minutes ? sprintf('%d:%02d', floor($attendance->total_break_minutes / 60), $attendance->total_break_minutes % 60) : '' }}
                     </td>
                     <td>
                         @if ($attendance)
