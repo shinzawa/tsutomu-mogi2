@@ -216,7 +216,7 @@ class AttendanceController extends Controller
                 })->implode(' / ');
 
                 fputcsv($stream, [
-                    $a->work_date,
+                    $a->work_date->format('Y-m-d'),
                     optional($a->clock_in)->format('H:i'),
                     optional($a->clock_out)->format('H:i'),
                     $a->total_break_minutes,
