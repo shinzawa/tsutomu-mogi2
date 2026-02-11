@@ -60,6 +60,14 @@ class StampCorrectionController extends Controller
 
         // DB に反映
         $attendance->save();
+        $attendance->breaks()->delete();
+
+        foreach ($correction->breaks as $correctionBreak) {
+            $attendance->breaks()->create([
+                'start' => $correctionBreak->start,
+                'end' => $correctionBreak->end,
+            ]);
+        }
 
         return redirect()
             ->route('admin.stamp_correction.show', $id)

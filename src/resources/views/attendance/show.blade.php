@@ -135,7 +135,7 @@
                         @error('break_end.' . $i)
                         {{ $message }}
                         @enderror
-                    </div>  
+                    </div>
                     @endif
                     </tr>
                     @endfor
@@ -145,10 +145,10 @@
                             <textarea name="note" class="form-control" rows="3">{{ $attendance->note }}</textarea>
                         </td>
                         <div class="form__error">
-                        @error('note')
-                        {{ $message }}
-                        @enderror
-                        </div>  
+                            @error('note')
+                            {{ $message }}
+                            @enderror
+                        </div>
                     </tr>
             </table>
             <div class="right-align">
