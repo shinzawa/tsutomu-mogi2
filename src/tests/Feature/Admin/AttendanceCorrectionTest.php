@@ -6,7 +6,9 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Admin;
 use App\Models\Attendance;
+use App\Models\BreakTime;
 use App\Models\CorrectionRequestAttendance;
+use App\Models\CorrectionRequestBreakTime;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -49,11 +51,37 @@ class AttendanceCorrectionTest extends TestCase
     public function test_admin_can_approve_correction_request()
     {
         // 1. 前準備：管理者、一般ユーザー、申請データを作成
-        $attendance = Attendance::factory()->create(['work_date' => '2025-02-01', 'clock_out' => '2025-02-01 17:00']);
+        $attendance = Attendance::factory()->create([
+            'work_date' => '2025-02-01',
+            'clock_out' => '2025-02-01 17:00'
+        ]);
+        $break1 = BreakTime::factory()->create([
+            'attendance_id' => $attendance->id,
+            'start' => '2025-02-01 12:00',
+            'end' => '2025-02-01 13:00'
+        ]);
+        $break2 = BreakTime::factory()->create([
+            'attendance_id' => $attendance->id,
+            'start' => '2025-02-01 15:00',
+            'end' => '2025-02-01 15:30'
+        ]);
+
         $request = CorrectionRequestAttendance::factory()->create([
             'attendances_id' => $attendance->id,
             'status' => 'pending',
             'requested_clock_out' => '18:00', // 修正後の希望時間
+        ]);
+
+        $requsetBreak1 = CorrectionRequestBreakTime::factory()->create([
+            'request_id' => $request->id,
+            'start' => '2025-02-01 12:00:00',
+            'end' => '2025-02-01 13:00:00'
+        ]);
+
+        $requsetBreak2 = CorrectionRequestBreakTime::factory()->create([
+            'request_id' => $request->id,
+            'start' => '2025-02-01 14:00:00',
+            'end' => '2025-02-01 14:30:00'
         ]);
 
         // 2. 実行：管理者としてログインし、承認API（またはRoute）を叩く
@@ -73,6 +101,19 @@ class AttendanceCorrectionTest extends TestCase
         $this->assertDatabaseHas('attendances', [
             'id' => $attendance->id,
             'clock_out' => '2025-02-01 18:00:00',
+        ]);
+        // 元の勤怠データの休憩時刻が、申請通りになっているか?
+        $this->assertDatabaseHas('breaks', [
+            'id' => 3,
+            'attendance_id' => $attendance->id,
+            'start' => '2025-02-01 12:00:00',
+            'end' => '2025-02-01 13:00:00'
+        ]);
+        $this->assertDatabaseHas('breaks', [
+            'id' => 4,
+            'attendance_id' => $attendance->id,
+            'start' => '2025-02-01 14:00:00',
+            'end' => '2025-02-01 14:30:00'
         ]);
     }
 }
